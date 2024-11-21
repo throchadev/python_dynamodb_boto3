@@ -1,0 +1,22 @@
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+    ports:
+      - 4566:4566 # Edge port
+    environment:
+      - SERVICES=${SERVICES- }
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - PERSISTENCE=${PERSISTENCE- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=${DOCKER_LOCATION}
+      - AWS_ACCESS_KEY_ID=teste
+      - AWS_SECRET_ACCESS_KEY=teste
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_DEFAULT_OUTPUT=json
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "./notification.json:/opt/code/localstack/notification.json"
+      - "./init-aws.sh:/docker-entrypoint-initaws.d/init-aws.sh"
+      - "/var/run/docker.sock:/var/run/docker.sock"
